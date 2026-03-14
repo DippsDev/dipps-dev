@@ -2,41 +2,30 @@
 
 import { useState, useEffect } from 'react';
 
+// Set your launch date here
+const LAUNCH_DATE = new Date('2026-04-14T00:00:00');
+
+function getTimeLeft() {
+  const diff = LAUNCH_DATE.getTime() - Date.now();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
+}
+
 export default function ComingSoon() {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 31,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  });
+  const [mounted, setMounted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { days, hours, minutes, seconds } = prev;
-
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
-        } else if (days > 0) {
-          days--;
-          hours = 23;
-          minutes = 59;
-          seconds = 59;
-        }
-
-        return { days, hours, minutes, seconds };
-      });
-    }, 1000);
-
+    setMounted(true);
+    setTimeLeft(getTimeLeft());
+    const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -166,7 +155,7 @@ export default function ComingSoon() {
           {/* Right side - Analog Clock */}
           <div className="flex justify-center px-4 md:px-8 lg:px-0 mt-8 lg:mt-0">
             <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-[400px] lg:max-w-md aspect-square">
-              <svg viewBox="0 0 400 400" className="w-full h-auto drop-shadow-2xl">
+              {mounted && (<svg viewBox="0 0 400 400" className="w-full h-auto drop-shadow-2xl">
                 {/* Clock face background */}
                 <circle cx="200" cy="200" r="180" fill="#111827" stroke="#374151" strokeWidth="4" />
                 <circle cx="200" cy="200" r="170" fill="none" stroke="#1F2937" strokeWidth="2" />
@@ -252,7 +241,7 @@ export default function ComingSoon() {
 
                 {/* Outer ring glow */}
                 <circle cx="200" cy="200" r="185" fill="none" stroke="#4B5563" strokeWidth="1" opacity="0.3" />
-              </svg>
+              </svg>)}
             </div>
           </div>
         </div>

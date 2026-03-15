@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 // Set your launch date here
-const LAUNCH_DATE = new Date('2026-04-14T00:00:00');
+const LAUNCH_DATE = new Date('2026-05-18T00:00:00');
 
 function getTimeLeft() {
   const diff = LAUNCH_DATE.getTime() - Date.now();
@@ -24,7 +24,6 @@ export default function ComingSoon() {
 
   useEffect(() => {
     setMounted(true);
-    setTimeLeft(getTimeLeft());
     const timer = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(timer);
   }, []);
@@ -83,19 +82,19 @@ export default function ComingSoon() {
 
             {/* Timer values */}
             <div className="flex justify-center lg:justify-start gap-2 sm:gap-3 md:gap-5 lg:gap-4 mb-10 md:mb-12 lg:mb-16">
-              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
+              <div suppressHydrationWarning className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
                 {String(timeLeft.days).padStart(2, '0')}
               </div>
               <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-gray-600">:</div>
-              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
+              <div suppressHydrationWarning className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
                 {String(timeLeft.hours).padStart(2, '0')}
               </div>
               <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-gray-600">:</div>
-              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
+              <div suppressHydrationWarning className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
                 {String(timeLeft.minutes).padStart(2, '0')}
               </div>
               <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-gray-600">:</div>
-              <div className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
+              <div suppressHydrationWarning className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg">
                 {String(timeLeft.seconds).padStart(2, '0')}
               </div>
             </div>

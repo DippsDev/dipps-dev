@@ -23,6 +23,9 @@ const roboto = localFont({
 export const metadata: Metadata = {
   title: "dipps.dev",
   description: "Personal website",
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

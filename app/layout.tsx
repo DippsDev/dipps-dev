@@ -3,6 +3,7 @@ import { Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Particles from "../components/Particles";
+import ThemeProvider from "../components/ThemeProvider";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -47,7 +48,9 @@ export default function RootLayout({
           />
         </div>
         <div className="relative z-10">
-          {children}
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
         </div>
       </body>
     </html>

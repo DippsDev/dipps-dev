@@ -13,14 +13,16 @@ const links = [
 
 export default function FooterSection() {
     return (
-        <footer id="contact" className="w-full border-t border-[#1a1a1a]/10 px-6 sm:px-8 py-16 flex flex-col items-center gap-10" style={{ marginTop: "150px" }}>
+        <footer id="contact" className="w-full border-t-2 border-gray-400 dark:border-[rgba(255,255,255,0.15)] px-6 sm:px-8 py-16 flex flex-col items-center gap-10 transition-colors duration-300" style={{ marginTop: "150px" }}>
+
+            <div className="w-full border-t border-black"></div>
 
             <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ duration: 0.6, ease }}
-                className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-[#1a1a1a] text-center leading-snug max-w-xl" style={{ marginTop: "30px" }}
+                className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-[var(--text)] text-center leading-snug max-w-xl transition-colors duration-300 pt-8" style={{ marginTop: "30px" }}
             >
                 Let&apos;s build something together.
             </motion.p>
@@ -36,7 +38,7 @@ export default function FooterSection() {
                     <a
                         key={link.label}
                         href={link.href}
-                        className="text-sm sm:text-lg text-[#555] border-b border-transparent hover:border-[#555] hover:text-[#1a1a1a] transition-all pb-0.5 [font-family:var(--font-roboto)]"
+                        className="text-sm sm:text-lg text-[var(--muted)] border-b border-transparent hover:border-[var(--border)] hover:text-[var(--text)] transition-all duration-300 pb-0.5 [font-family:var(--font-roboto)]"
                     >
                         {link.label}
                     </a>
@@ -48,7 +50,7 @@ export default function FooterSection() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.6, ease }}
-                className="text-sm text-[#aaa] [font-family:var(--font-roboto)]" style={{ marginBottom: "30px" }}
+                className="text-sm text-[var(--muted)] [font-family:var(--font-roboto)] transition-colors duration-300" style={{ marginBottom: "30px" }}
             >
                 © {new Date().getFullYear()} DippsDev. All rights reserved.
             </motion.p>

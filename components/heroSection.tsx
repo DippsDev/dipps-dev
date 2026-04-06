@@ -34,6 +34,7 @@ export default function HeroSection() {
     });
 
     const [mounted, setMounted] = useState(false);
+    const [showLinks, setShowLinks] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -148,10 +149,26 @@ export default function HeroSection() {
                 >
                     <Link
                         href=""
+                        onClick={(e) => { e.preventDefault(); setShowLinks(prev => !prev); }}
                         className="bg-[var(--border)] text-[var(--button-text)] px-8 h-10 w-24 rounded-full text-sm sm:text-base font-normal tracking-wide hover:bg-slate-900 dark:bg-black dark:text-white transition-colors duration-300 [font-family:var(--font-roboto)] flex items-center justify-center"
                     >
                         View
                     </Link>
+                    <AnimatePresence>
+                        {showLinks && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.5 }}
+                                className="flex flex-col gap-2 mt-4" style={{marginBottom:"30px", marginTop:"20px"}}
+                            >
+                                <a href="https://mennoskoffiebar.nl/" className="text-[var(--text)] text-sm sm:text-base border-b border-[var(--border)] pb-0.5 hover:opacity-60 transition-opacity w-fit">Menno's Koffiebar.</a>
+                                <a href="https://smithtransport.co.bw/" className="text-[var(--text)] text-sm sm:text-base border-b border-[var(--border)] pb-0.5 hover:opacity-60 transition-opacity w-fit">Smith Transport & Rigging.</a>
+                                <a href="https://website-beta-pearl-26.vercel.app/" className="text-[var(--text)] text-sm sm:text-base border-b border-[var(--border)] pb-0.5 hover:opacity-60 transition-opacity w-fit">Label Maker Pro.</a>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                     <a href="https://github.com/DippsDev" className="text-[var(--text)] text-sm sm:text-base border-b border-[var(--border)] pb-0.5 hover:opacity-60 transition-opacity w-fit">
                         See all projects
                     </a>

@@ -25,16 +25,16 @@ const ease = "easeOut" as const;
 
 export default function ServicesSection() {
     return (
-        <section className="flex flex-col items-center px-6 sm:px-8 pb-12" id="services" style={{ marginTop: "100px" }}>
+        <section className="flex flex-col items-center px-6 sm:px-8 pb-12" id="services">
 
             <motion.h1
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ delay: 0, duration: 0.7, ease }}
-                className="text-[clamp(2rem,4.5vw,3.5rem)] text-center leading-[1.1] max-w-3xl font-bold text-[#1a1a1a]"
+                className="text-[clamp(2rem,4.5vw,3.5rem)] text-center leading-[1.1] max-w-3xl font-bold text-[#1a1a1a]" style={{marginTop:"180px"}}
             >
-                Services I offer. Solutions I deliver.
+                Services.
             </motion.h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl w-full" style={{ marginTop: "50px" }}>

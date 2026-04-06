@@ -27,6 +27,12 @@ export default function HeroSection() {
     return (
         <>
             <section className="min-h-screen flex flex-col items-center justify-center gap-4 px-6 sm:px-8 pt-16 sm:pt-0">
+                
+                <motion.h2
+                {...fadeUpProps(0)} 
+                className="text-[clamp(1rem,1vw,1rem)]  text-[#1a1a1a] text-center ">
+                    Dipako Thupayatlase
+                    </motion.h2> 
 
                 <motion.h1
                     {...fadeUpProps(0)}
@@ -59,7 +65,7 @@ export default function HeroSection() {
                     className="text-center max-w-lg text-sm sm:text-base leading-relaxed text-[#555]"
                     style={{ marginTop: '24px' }}
                 >
-                    See the projects. Build something better. This website was designed and developed entirely from the ground up—crafted to demonstrate my ability to take a concept and turn it into a fully functional, polished product. From backend architecture to frontend design, every detail reflects my approach to building scalable, modern solutions
+                    Explore a track record of real solutions: a full website built for a rigging and transportation company, web scrapers that automate data extraction, and complete web and mobile applications designed from frontend to backend. I’ve engineered API‑driven systems, integrated complex databases, and delivered automation tools that streamline workflows. Each project reflects a focus on usability, scalability, and maintainability—proof that better builds start with proven results.
                 </motion.p>
 
                 <motion.div

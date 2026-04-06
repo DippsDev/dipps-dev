@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-// import Threads from "@/components/threads";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -20,7 +19,7 @@ const roboto = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Your Name",
+  title: "dipps.dev",
   description: "Personal website",
 };
 
@@ -32,9 +31,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${playfair.className} ${greatVibes.variable} ${roboto.variable} antialiased bg-[#f5f5f3]`}>
-        <div className="fixed inset-0 -z-10">
-          {/* <Threads color={[0.75, 0.75, 0.75]} amplitude={1.5} distance={0.3} enableMouseInteraction /> */}
-        </div>
         {children}
       </body>
     </html>

@@ -7,7 +7,8 @@ const ease = "easeOut" as const;
 const links = [
     { label: "GitHub", href: "https://github.com/DippsDev" },
     { label: "LinkedIn", href: "https://bw.linkedin.com/in/dipako-thupayatlase-46881233b?utm_source=share&utm_medium=member_mweb&utm_campaign=share_via&utm_content=profile" },
-    { label: "Email", href: "https://mail.google.com/mail/?view=cm&to=dippsinbox@gmail.com" },
+    { label: "Email", href: "mailto:dippsinbox@gmail.com" },
+    { label: "WhatsApp", href: "https://wa.me/27718205387" },
 ];
 
 export default function FooterSection() {
@@ -49,7 +50,7 @@ export default function FooterSection() {
                 transition={{ delay: 0.3, duration: 0.6, ease }}
                 className="text-sm text-[#aaa] [font-family:var(--font-roboto)]" style={{ marginBottom: "30px" }}
             >
-                © {new Date().getFullYear()} D.Developments. All rights reserved.
+                © {new Date().getFullYear()} DippsDev. All rights reserved.
             </motion.p>
 
         </footer>

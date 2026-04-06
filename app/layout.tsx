@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import Particles from "../components/Particles";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -30,8 +31,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${playfair.className} ${greatVibes.variable} ${roboto.variable} antialiased bg-[#f5f5f3]`}>
-        {children}
+      <body className={`${playfair.className} ${greatVibes.variable} ${roboto.variable} antialiased relative`}>
+        <div className="fixed inset-0 z-0">
+          <Particles
+            particleColors={["#ffffff"]}
+            particleCount={120}
+            particleSpread={10}
+            speed={0.1}
+            particleBaseSize={200}
+            moveParticlesOnHover
+            alphaParticles={false}
+            disableRotation={false}
+            pixelRatio={1}
+            className="fixed inset-0 z-0"
+          />
+        </div>
+        <div className="relative z-10">
+          {children}
+        </div>
       </body>
     </html>
   );

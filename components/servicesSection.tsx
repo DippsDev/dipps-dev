@@ -32,7 +32,7 @@ export default function ServicesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ delay: 0, duration: 0.7, ease }}
-                className="text-[clamp(2rem,4.5vw,3.5rem)] text-center leading-[1.1] max-w-3xl font-bold text-[#1a1a1a]" style={{marginTop:"180px"}}
+                className="text-[clamp(2rem,4.5vw,3.5rem)] text-center leading-[1.1] max-w-3xl font-bold text-[var(--text)] transition-colors duration-300" style={{marginTop:"180px"}}
             >
                 Services.
             </motion.h1>
@@ -47,8 +47,8 @@ export default function ServicesSection() {
                         transition={{ delay: i * 0.15, duration: 0.7, ease }}
                         className="flex flex-col items-center text-center gap-4"
                     >
-                        <h2 className="text-lg sm:text-xl font-bold text-[#1a1a1a]">{service.title}</h2>
-                        <p className="text-sm sm:text-base leading-relaxed text-[#555] max-w-sm">{service.description}</p>
+                        <h2 className="text-lg sm:text-xl font-bold text-[var(--text)] transition-colors duration-300">{service.title}</h2>
+                        <p className="text-sm sm:text-base leading-relaxed text-[var(--muted)] transition-colors duration-300 max-w-sm">{service.description}</p>
                     </motion.div>
                 ))}
             </div>

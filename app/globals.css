@@ -10,3 +10,34 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
 }
+
+:root {
+  color-scheme: light;
+  --bg: #f5f5f3;
+  --surface: rgba(255, 255, 255, 0.88);
+  --text: #1a1a1a;
+  --muted: #555;
+  --border: #1a1a1a;
+  --button-bg: rgba(255, 255, 255, 0.8);
+  --button-text: #ffffff;
+  --link-hover: #333;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #020617;
+  --surface: rgba(15, 23, 42, 0.9);
+  --text: #ffffff;
+  --muted: #ffffff;
+  --border: #64748b;
+  --button-bg: rgba(30, 41, 59, 0.78);
+  --button-text: #ffffff;
+  --link-hover: #ffffff;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

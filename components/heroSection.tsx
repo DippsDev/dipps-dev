@@ -25,7 +25,38 @@ function fadeUpInViewProps(delay: number) {
 }
 
 export default function HeroSection() {
-    const [isLightMode, setIsLightMode] = useState(true);
+    const [isLightMode, setIsLightMode] = useState(() => {
+        // Initialize based on system preference
+        if (typeof window !== 'undefined') {
+            return !window.matchMedia("(prefers-color-scheme: dark)").matches;
+        }
+        return true; // fallback for SSR
+    });
+
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+        const updateTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+            const isDark = e.matches;
+            setIsLightMode(!isDark);
+        };
+
+        // Set initial theme
+        updateTheme(mediaQuery);
+
+        // Listen for changes
+        mediaQuery.addEventListener("change", updateTheme);
+
+        return () => {
+            mediaQuery.removeEventListener("change", updateTheme);
+        };
+    }, []);
 
     useEffect(() => {
         document.documentElement.dataset.theme = isLightMode ? "light" : "dark";
@@ -45,28 +76,30 @@ export default function HeroSection() {
     return (
         <>
             <section className="relative min-h-screen flex flex-col items-center justify-center gap-4 px-6 sm:px-8 pt-16 sm:pt-0">
-                <motion.button
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                    whileTap={{ scale: 0.92 }}
-                    onClick={() => setIsLightMode(prev => !prev)}
-                    className="absolute right-4 top-4 z-10 inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--button-bg)] text-[var(--button-text)] shadow-sm transition hover:bg-[var(--surface)] focus:outline-none focus:ring-0 focus-visible:ring-0"
-                    aria-label={isLightMode ? "Switch to dark mode" : "Switch to light mode"}
-                >
-                    <AnimatePresence mode="wait">
-                        <motion.span
-                            key={isLightMode ? "moon" : "sun"}
-                            initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
-                            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                            exit={{ opacity: 0, scale: 0.8, rotate: 15 }}
-                            transition={{ duration: 0.18, ease: "easeOut" }}
-                            className="flex items-center justify-center"
-                        >
-                            {icon}
-                        </motion.span>
-                    </AnimatePresence>
-                </motion.button>
+                {mounted && (
+                    <motion.button
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => setIsLightMode(prev => !prev)}
+                        className="absolute right-4 top-4 z-10 inline-flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--button-bg)] text-[var(--button-text)] shadow-sm transition hover:bg-[var(--surface)] focus:outline-none focus:ring-0 focus-visible:ring-0"
+                        aria-label={isLightMode ? "Switch to dark mode" : "Switch to light mode"}
+                    >
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={isLightMode ? "moon" : "sun"}
+                                initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
+                                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                exit={{ opacity: 0, scale: 0.8, rotate: 15 }}
+                                transition={{ duration: 0.18, ease: "easeOut" }}
+                                className="flex items-center justify-center"
+                            >
+                                {icon}
+                            </motion.span>
+                        </AnimatePresence>
+                    </motion.button>
+                )}
 
                 <motion.h2
                 {...fadeUpProps(0)} 
@@ -114,7 +147,7 @@ export default function HeroSection() {
                     style={{ marginTop: '20px' }}
                 >
                     <Link
-                        href="/showcase"
+                        href=""
                         className="bg-[var(--border)] text-[var(--button-text)] px-8 h-10 w-24 rounded-full text-sm sm:text-base font-normal tracking-wide hover:bg-slate-900 dark:bg-black dark:text-white transition-colors duration-300 [font-family:var(--font-roboto)] flex items-center justify-center"
                     >
                         View

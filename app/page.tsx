@@ -1,11 +1,9 @@
-import HeroSection from "@/components/heroSection";
-import FooterSection from "@/components/footerSection";
+import WorkSection from "@/components/WorkSection";
 
 export default function Home() {
   return (
     <main>
-      <HeroSection />
-      <FooterSection />
+      <WorkSection />
     </main>
   );
 }

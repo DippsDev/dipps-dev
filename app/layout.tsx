@@ -1,31 +1,33 @@
 import type { Metadata } from "next";
-import { Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Particles from "../components/Particles";
+import WaveField from "../components/WaveField";
 import ThemeProvider from "../components/ThemeProvider";
+import SoundProvider from "../components/SoundProvider";
+import SmoothScroll from "../components/SmoothScroll";
+import WorkProvider from "../components/WorkProvider";
+import SiteChrome from "../components/SiteChrome";
+import WorkTimeline from "../components/WorkTimeline";
+import PageTransition from "../components/PageTransition";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const greatVibes = localFont({
-  src: "../public/fonts/Great_Vibes/GreatVibes-Regular.ttf",
-  variable: "--font-great-vibes",
-});
-
-const roboto = localFont({
-  src: "../public/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf",
-  variable: "--font-roboto",
+const archivo = localFont({
+  src: "../public/fonts/Archivo/Archivo-VariableFont_wdth,wght.ttf",
+  variable: "--font-archivo",
+  weight: "100 900",
 });
 
 export const metadata: Metadata = {
   title: "dipps.dev",
-  description: "Personal website",
+  description: "Dipako Thupayatlase — full-stack software engineer.",
   icons: {
-    icon: '/favicon.png',
+    icon: "/favicon.png",
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover" as const,
 };
 
 export default function RootLayout({
@@ -35,26 +37,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${playfair.className} ${greatVibes.variable} ${roboto.variable} antialiased relative`}>
-        <div className="fixed inset-0 z-0">
-          <Particles
-            particleColors={["#ffffff"]}
-            particleCount={120}
-            particleSpread={10}
-            speed={0.1}
-            particleBaseSize={200}
-            moveParticlesOnHover
-            alphaParticles={false}
-            disableRotation={false}
-            pixelRatio={1}
-            className="fixed inset-0 z-0"
-          />
-        </div>
-        <div className="relative z-10">
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
-        </div>
+      <body className={`${archivo.className} ${archivo.variable} relative antialiased`}>
+        <ThemeProvider>
+          <SoundProvider>
+            <SmoothScroll>
+              <WorkProvider>
+                <PageTransition>
+                  <WaveField />
+                  <SiteChrome />
+                  <WorkTimeline />
+                  <div className="relative z-10">{children}</div>
+                </PageTransition>
+              </WorkProvider>
+            </SmoothScroll>
+          </SoundProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

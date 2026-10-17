@@ -12,34 +12,40 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "Skyf",
+    href: "https://skyf.online/",
+    kind: "site",
+    index: "01",
+  },
+  {
     name: "La Vida Loca",
     href: "https://la-vida-loca.vercel.app/",
     kind: "site",
-    index: "01",
+    index: "02",
   },
   {
     name: "MBO Nights",
     href: "https://mbo-nights.vercel.app/",
     kind: "site",
-    index: "02",
+    index: "03",
   },
   {
     name: "Monkify AI Humanizer",
     href: "https://monkify-ai-humanizer.vercel.app/",
     kind: "tool",
-    index: "03",
+    index: "04",
   },
   {
     name: "Label Maker Pro",
     href: "https://shipping-label-maker-ecru.vercel.app/",
     kind: "tool",
-    index: "04",
+    index: "05",
   },
   {
     name: "Menno's Koffiebar",
     href: "https://specialty-koffie-catering.vercel.app/",
     kind: "site",
-    index: "05",
+    index: "06",
   },
 ];
 

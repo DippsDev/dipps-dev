@@ -24,6 +24,7 @@ html[data-theme="dark"] {
 }
 
 html {
+  background-color: var(--bg);
   scroll-padding-top: 4rem;
 }
 
@@ -535,7 +536,7 @@ button {
   .plane-stage {
     padding-top: 6.4rem;
     padding-bottom: 6.2rem;
-    touch-action: none;
+    touch-action: pan-y;
   }
 
   .plane-track,
@@ -547,7 +548,7 @@ button {
   .plane-card:nth-child(6n + 5),
   .plane-card:nth-child(6n + 6),
   .plane-card:nth-child(n + 7) {
-    touch-action: none;
+    touch-action: pan-y;
   }
 
   .plane-track {

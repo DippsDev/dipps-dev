@@ -40,6 +40,15 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     if (!ready) return;
     document.documentElement.dataset.theme = isLight ? "light" : "dark";
     window.localStorage.setItem("dipps-theme", isLight ? "light" : "dark");
+
+    const themeColor = isLight ? "#f4f4f2" : "#0f0f0f";
+    let themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (!themeColorMeta) {
+      themeColorMeta = document.createElement("meta");
+      themeColorMeta.name = "theme-color";
+      document.head.append(themeColorMeta);
+    }
+    themeColorMeta.content = themeColor;
   }, [isLight, ready]);
 
   const toggle = () => setIsLight((prev) => !prev);

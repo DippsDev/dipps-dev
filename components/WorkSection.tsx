@@ -150,26 +150,12 @@ export default function WorkSection() {
     const section = containerRef.current;
     if (!section) return;
 
-    const origin = { x: 0, y: 0, yLast: 0, id: -1, axis: "" as "" | "x" | "y" };
-
-    const scrollerTop = () => document.scrollingElement?.scrollTop ?? window.scrollY;
-
-    const applyScroll = (deltaY: number) => {
-      const scroller = document.scrollingElement;
-      if (!scroller) return;
-      const top = Math.min(Math.max(0, scrollerTop() + deltaY), scroller.scrollHeight - window.innerHeight);
-      if (lenis) {
-        lenis.scrollTo(top, { immediate: true, force: true });
-      } else {
-        scroller.scrollTop = top;
-      }
-    };
+    const origin = { x: 0, y: 0, id: -1, axis: "" as "" | "x" | "y" };
 
     const onDown = (event: PointerEvent) => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
       origin.x = event.clientX;
       origin.y = event.clientY;
-      origin.yLast = event.clientY;
       origin.id = event.pointerId;
       origin.axis = "";
     };
@@ -182,10 +168,6 @@ export default function WorkSection() {
         if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
         origin.axis = Math.abs(dy) > Math.abs(dx) ? "y" : "x";
       }
-      if (origin.axis !== "y") return;
-      event.preventDefault();
-      applyScroll(origin.yLast - event.clientY);
-      origin.yLast = event.clientY;
     };
 
     const onUp = (event: PointerEvent) => {
@@ -211,21 +193,16 @@ export default function WorkSection() {
     };
 
     section.addEventListener("pointerdown", onDown);
-    section.addEventListener("pointermove", onMove, { passive: false, capture: true });
+    section.addEventListener("pointermove", onMove, { capture: true });
     section.addEventListener("pointerup", onUp);
     section.addEventListener("pointercancel", onCancel);
-    const onTouchMove = (event: TouchEvent) => {
-      if (origin.axis === "y") event.preventDefault();
-    };
-    section.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
       section.removeEventListener("pointerdown", onDown);
       section.removeEventListener("pointermove", onMove, { capture: true });
       section.removeEventListener("pointerup", onUp);
       section.removeEventListener("pointercancel", onCancel);
-      section.removeEventListener("touchmove", onTouchMove);
     };
-  }, [goTo, lastIndex, lenis]);
+  }, [goTo, lastIndex]);
 
   useEffect(() => {
     const track = trackRef.current;

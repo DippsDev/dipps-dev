@@ -262,6 +262,7 @@ export default function WorkSection() {
 
   const rawX = useTransform(progress, (value) => -shift * value);
   const x = useSpring(rawX, spring);
+  const scrollHintOpacity = useTransform(progress, [0, 0.025, 0.07], [1, 0.5, 0]);
 
   useMotionValueEvent(progress, "change", (value) => {
     const next = Math.round(value * lastIndex);
@@ -295,6 +296,12 @@ export default function WorkSection() {
               }}
             />
           ))}
+        </motion.div>
+        <motion.div className="scroll-cue chrome" style={{ opacity: scrollHintOpacity }}>
+          <span>Scroll to explore</span>
+          <svg className="scroll-cue__arrow" viewBox="0 0 16 20" fill="none" aria-hidden="true">
+            <path d="M8 1v16m0 0 6-6m-6 6-6-6" stroke="currentColor" strokeWidth="1.2" />
+          </svg>
         </motion.div>
       </div>
     </section>

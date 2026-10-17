@@ -239,6 +239,38 @@ button {
   touch-action: pan-y;
 }
 
+.scroll-cue {
+  position: absolute;
+  bottom: 7rem;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--muted);
+  font-size: 11px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.scroll-cue__arrow {
+  width: 0.7rem;
+  height: 0.9rem;
+  animation: scroll-cue-nudge 1.15s ease-in-out infinite;
+}
+
+@keyframes scroll-cue-nudge {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(4px);
+  }
+}
+
 .plane-card {
   pointer-events: auto;
   position: relative;
@@ -418,6 +450,10 @@ button {
     transform: none !important;
   }
 
+  .scroll-cue__arrow {
+    animation: none;
+  }
+
   .plane-bracket path {
     transition: none;
   }
@@ -537,6 +573,11 @@ button {
     padding-top: 6.4rem;
     padding-bottom: 6.2rem;
     touch-action: pan-y;
+  }
+
+  .scroll-cue {
+    bottom: 5.2rem;
+    font-size: 10px;
   }
 
   .plane-track,

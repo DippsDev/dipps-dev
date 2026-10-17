@@ -10,7 +10,6 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import Image from "next/image";
 import { useLenis } from "lenis/react";
 import { type Project } from "@/lib/projects";
 import { useWork } from "./WorkProvider";
@@ -48,7 +47,7 @@ function PlaneCard({
   lastIndex: number;
   progress: MotionValue<number>;
   active: boolean;
-  onSelect: () => void;
+  onSelect: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
   const reduce = useReducedMotion();
   const span = Math.max(lastIndex, 1);
@@ -57,23 +56,23 @@ function PlaneCard({
   const yRaw = useTransform(dist, (d) => Math.max(-1.2, Math.min(1.2, d)) * -40);
   const rotateYRaw = useTransform(dist, (d) => Math.max(-1, Math.min(1, d)) * -18);
   const fadeRaw = useTransform(dist, (d) => 0.4 + (1 - Math.min(1, Math.abs(d))) * 0.6);
-  const imgScaleRaw = useTransform(dist, (d) => 1.18 - (1 - Math.min(1, Math.abs(d))) * 0.18);
   const insetRaw = useTransform(dist, (d) => Math.min(18, Math.abs(d) * 15));
   const scale = useSpring(scaleRaw, cardSpring);
   const y = useSpring(yRaw, cardSpring);
   const rotateY = useSpring(rotateYRaw, cardSpring);
   const fade = useSpring(fadeRaw, cardSpring);
-  const imgScale = useSpring(imgScaleRaw, cardSpring);
   const inset = useSpring(insetRaw, cardSpring);
   const clipPath = useTransform(inset, (value) => `inset(${value}% 0%)`);
 
   return (
-    <motion.button
-      type="button"
+    <motion.a
+      href={project.href}
+      target="_blank"
+      rel="noreferrer"
       className={`plane-card${active ? " is-active" : ""}`}
       onClick={onSelect}
       aria-current={active ? "true" : undefined}
-      aria-label={`${project.name} ${project.index}`}
+      aria-label={`Open ${project.name} in a new tab`}
       style={reduce ? undefined : { scale, y }}
     >
       <div className="plane-card__shell">
@@ -81,19 +80,40 @@ function PlaneCard({
           className="plane-card__frame"
           style={reduce ? undefined : { opacity: fade, rotateY, clipPath }}
         >
-          {project.image ? (
-            <motion.div className="plane-card__media" style={reduce ? undefined : { scale: imgScale }}>
-              <Image
-                src={project.image}
-                alt={project.name}
-                fill
-                sizes="36vw"
-                className="object-cover object-top"
-              />
-            </motion.div>
-          ) : (
-            <span className="chrome plane-card__label">[{project.index}]</span>
-          )}
+          <motion.div
+            key={`${project.index}-${active ? "active" : "idle"}`}
+            className="plane-card__title"
+            aria-hidden="true"
+            initial={reduce ? false : "hidden"}
+            animate={active ? "active" : "idle"}
+            variants={{
+              hidden: {},
+              idle: {
+                transition: { staggerChildren: reduce ? 0 : 0.018, staggerDirection: -1 },
+              },
+              active: {
+                transition: {
+                  delayChildren: reduce ? 0 : 0.08,
+                  staggerChildren: reduce ? 0 : 0.028,
+                },
+              },
+            }}
+          >
+            {Array.from(project.name).map((character, characterIndex) => (
+              <motion.span
+                key={`${character}-${characterIndex}`}
+                className="plane-card__letter"
+                variants={{
+                  hidden: { opacity: 0, y: 12, filter: "blur(5px)" },
+                  idle: { opacity: 0.46, y: 0, filter: "blur(0px)" },
+                  active: { opacity: 1, y: 0, filter: "blur(0px)" },
+                }}
+                transition={{ duration: reduce ? 0 : 0.38, ease: [0.23, 1, 0.32, 1] }}
+              >
+                {character === " " ? "\u00a0" : character}
+              </motion.span>
+            ))}
+          </motion.div>
         </motion.div>
         <CornerBrackets />
         <span className="chrome plane-card__open">
@@ -105,7 +125,7 @@ function PlaneCard({
           </span>
         ) : null}
       </div>
-    </motion.button>
+    </motion.a>
   );
 }
 
@@ -288,9 +308,10 @@ export default function WorkSection() {
               lastIndex={lastIndex}
               progress={progress}
               active={featured === index}
-              onSelect={() => {
+              onSelect={(event) => {
                 if (skipClick.current) {
                   skipClick.current = false;
+                  event.preventDefault();
                   return;
                 }
                 goTo(index);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const ease = [0.23, 1, 0.32, 1] as const;
 const ZONE = "Africa/Gaborone";
@@ -88,7 +89,14 @@ export default function AboutPage() {
   return (
     <main className="about">
       <motion.div className="about__image" aria-hidden initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, ease }}>
-        <div className="about__plane" />
+        <Image
+          src="/about-photo.jpg"
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 900px) 46vw, 100vw"
+          className="about__portrait"
+        />
       </motion.div>
 
       <div className="about__body">
@@ -119,7 +127,7 @@ export default function AboutPage() {
               ))}
             </div>
             <div className="about__socials-list">
-              <BracketLink href="mailto:dippsinbox@gmail.com">Email</BracketLink>
+              <BracketLink href="https://www.tiktok.com/@dipps.b.k?_r=1&_t=ZS-9Ad8qavjmAp">TikTok</BracketLink>
               <BracketLink href="https://wa.me/26775362329">WhatsApp</BracketLink>
             </div>
           </motion.nav>

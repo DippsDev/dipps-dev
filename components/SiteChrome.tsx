@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSound } from "./SoundProvider";
 import { useTheme } from "./ThemeProvider";
 import { useWork } from "./WorkProvider";
 import { usePageNav } from "./PageTransition";
@@ -14,15 +12,12 @@ import "./FolderFloat.css";
 const FolderFloat = dynamic(() => import("./FolderFloat"), { ssr: false });
 
 const ease = "transition-opacity duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)]";
-const EMAIL_HREF = "mailto:dippsinbox@gmail.com";
-const WHATSAPP_HREF = "https://wa.me/26775362329";
 
 const menuItems = [
   { label: "All", value: "all" },
   { label: "Sites", value: "site" },
   { label: "Tools", value: "tool" },
   { label: "About", value: "about" },
-  { label: "Contact", value: "contact" },
 ];
 
 function BracketLabel({
@@ -55,35 +50,12 @@ function BracketLabel({
 
 export default function SiteChrome() {
   const { isLight, toggle: toggleTheme } = useTheme();
-  const { enabled, toggle: toggleSound } = useSound();
   const { filters, setFilter } = useWork();
   const total = filters[0]?.count ?? 0;
   const pathname = usePathname();
   const nav = usePageNav();
   const onHome = pathname === "/";
   const onAbout = pathname === "/about";
-  const [contactOpen, setContactOpen] = useState(false);
-
-  useEffect(() => {
-    setContactOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    if (!contactOpen) return;
-    const onPointer = (event: PointerEvent) => {
-      if ((event.target as HTMLElement | null)?.closest("[data-contact]")) return;
-      setContactOpen(false);
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setContactOpen(false);
-    };
-    document.addEventListener("pointerdown", onPointer);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("pointerdown", onPointer);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [contactOpen]);
 
   const openWork = (next?: WorkFilter) => {
     if (next) setFilter(next);
@@ -93,10 +65,6 @@ export default function SiteChrome() {
   const onMenuSelect = (value: string) => {
     if (value === "about") {
       nav("/about");
-      return;
-    }
-    if (value === "contact") {
-      setContactOpen(true);
       return;
     }
     openWork(value as WorkFilter);
@@ -137,15 +105,6 @@ export default function SiteChrome() {
           <div className="site-chrome__toggles">
             <button
               type="button"
-              onClick={toggleSound}
-              className={`group ${ease} ${enabled ? "opacity-100" : "opacity-[.32] hover:opacity-100"}`}
-              aria-pressed={enabled}
-              aria-label={enabled ? "Mute background sound" : "Enable background sound"}
-            >
-              <BracketLabel active={enabled}>Sound</BracketLabel>
-            </button>
-            <button
-              type="button"
               onClick={toggleTheme}
               className="group opacity-[.32] hover:opacity-100"
               aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
@@ -180,29 +139,20 @@ export default function SiteChrome() {
           </div>
         ) : null}
 
-        <nav className="site-chrome__links">
-          <Link
-            href="/about"
-            className="group"
-            onClick={(event) => {
-              event.preventDefault();
-              nav("/about");
-            }}
-          >
-            <BracketLabel active={onAbout}>About</BracketLabel>
-          </Link>
-          <button
-            type="button"
-            className="group"
-            data-contact
-            aria-expanded={contactOpen}
-            aria-haspopup="menu"
-            aria-controls="contact-menu"
-            onClick={() => setContactOpen((open) => !open)}
-          >
-            <BracketLabel active={contactOpen}>Contact</BracketLabel>
-          </button>
-        </nav>
+        {!onAbout ? (
+          <nav className="site-chrome__links">
+            <Link
+              href="/about"
+              className="group"
+              onClick={(event) => {
+                event.preventDefault();
+                nav("/about");
+              }}
+            >
+              <BracketLabel>About</BracketLabel>
+            </Link>
+          </nav>
+        ) : null}
 
         {!onAbout ? (
           <div className="site-chrome__menu">
@@ -229,23 +179,6 @@ export default function SiteChrome() {
           </div>
         ) : null}
       </div>
-      {contactOpen ? (
-        <div className="contact-menu pointer-events-auto" id="contact-menu" role="menu" data-contact>
-          <a role="menuitem" href={EMAIL_HREF} className="group" onClick={() => setContactOpen(false)}>
-            <BracketLabel>Email</BracketLabel>
-          </a>
-          <a
-            role="menuitem"
-            href={WHATSAPP_HREF}
-            className="group"
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => setContactOpen(false)}
-          >
-            <BracketLabel>WhatsApp</BracketLabel>
-          </a>
-        </div>
-      ) : null}
     </header>
   );
 }

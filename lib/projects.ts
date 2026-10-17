@@ -4,7 +4,6 @@ export type WorkFilter = "all" | ProjectKind;
 export type Project = {
   name: string;
   href?: string;
-  image?: string;
   kind: ProjectKind;
   index: string;
   duration?: string;
@@ -12,13 +11,36 @@ export type Project = {
 };
 
 export const projects: Project[] = [
-  { name: "Project title", kind: "site", index: "01", duration: "00:01:24", year: "2024" },
-  { name: "Project title", kind: "site", index: "02", duration: "00:00:48", year: "2024" },
-  { name: "Project title", kind: "tool", index: "03", duration: "00:02:36", year: "2025" },
-  { name: "Project title", kind: "site", index: "04", duration: "00:01:12", year: "2025" },
-  { name: "Project title", kind: "site", index: "05", duration: "00:03:05", year: "2025" },
-  { name: "Project title", kind: "tool", index: "06", duration: "00:00:54", year: "2026" },
-  { name: "Project title", kind: "site", index: "07", duration: "00:02:18", year: "2026" },
+  {
+    name: "La Vida Loca",
+    href: "https://la-vida-loca.vercel.app/",
+    kind: "site",
+    index: "01",
+  },
+  {
+    name: "MBO Nights",
+    href: "https://mbo-nights.vercel.app/",
+    kind: "site",
+    index: "02",
+  },
+  {
+    name: "Monkify AI Humanizer",
+    href: "https://monkify-ai-humanizer.vercel.app/",
+    kind: "tool",
+    index: "03",
+  },
+  {
+    name: "Label Maker Pro",
+    href: "https://shipping-label-maker-ecru.vercel.app/",
+    kind: "tool",
+    index: "04",
+  },
+  {
+    name: "Menno's Koffiebar",
+    href: "https://specialty-koffie-catering.vercel.app/",
+    kind: "site",
+    index: "05",
+  },
 ];
 
 export const projectFilters: { id: WorkFilter; label: string }[] = [

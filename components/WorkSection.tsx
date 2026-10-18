@@ -230,6 +230,7 @@ export default function WorkSection() {
     };
 
     const onTouchStart = (event: TouchEvent) => {
+      if (!(event.target instanceof Node) || !section.contains(event.target)) return;
       if (event.touches.length !== 1) {
         touchOrigin.id = -1;
         return;
@@ -261,18 +262,18 @@ export default function WorkSection() {
     section.addEventListener("pointermove", onMove, { passive: false, capture: true });
     section.addEventListener("pointerup", onUp);
     section.addEventListener("pointercancel", onCancel);
-    section.addEventListener("touchstart", onTouchStart, { passive: true });
-    section.addEventListener("touchend", onTouchEnd, { passive: true });
-    section.addEventListener("touchcancel", onTouchCancel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true, capture: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true, capture: true });
+    window.addEventListener("touchcancel", onTouchCancel, { passive: true, capture: true });
     return () => {
       section.removeEventListener("wheel", onWheel);
       section.removeEventListener("pointerdown", onDown);
       section.removeEventListener("pointermove", onMove, { capture: true });
       section.removeEventListener("pointerup", onUp);
       section.removeEventListener("pointercancel", onCancel);
-      section.removeEventListener("touchstart", onTouchStart);
-      section.removeEventListener("touchend", onTouchEnd);
-      section.removeEventListener("touchcancel", onTouchCancel);
+      window.removeEventListener("touchstart", onTouchStart, { capture: true });
+      window.removeEventListener("touchend", onTouchEnd, { capture: true });
+      window.removeEventListener("touchcancel", onTouchCancel, { capture: true });
     };
   }, [goTo, lastIndex, lenis]);
 

@@ -151,6 +151,7 @@ export default function WorkSection() {
     if (!section) return;
 
     const origin = { x: 0, y: 0, yLast: 0, id: -1, axis: "" as "" | "x" | "y" };
+    const touchOrigin = { x: 0, y: 0, id: -1 };
 
     const scrollerTop = () => document.scrollingElement?.scrollTop ?? window.scrollY;
 
@@ -182,7 +183,7 @@ export default function WorkSection() {
     };
 
     const onDown = (event: PointerEvent) => {
-      if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (event.pointerType === "touch" || (event.pointerType === "mouse" && event.button !== 0)) return;
       origin.x = event.clientX;
       origin.y = event.clientY;
       origin.yLast = event.clientY;
@@ -191,7 +192,7 @@ export default function WorkSection() {
     };
 
     const onMove = (event: PointerEvent) => {
-      if (event.pointerId !== origin.id || event.pointerType === "mouse") return;
+      if (event.pointerId !== origin.id || event.pointerType === "mouse" || event.pointerType === "touch") return;
       const dx = event.clientX - origin.x;
       const dy = event.clientY - origin.y;
       if (!origin.axis) {
@@ -205,6 +206,7 @@ export default function WorkSection() {
     };
 
     const onUp = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
       if (event.pointerId !== origin.id) return;
       const dx = event.clientX - origin.x;
       const dy = event.clientY - origin.y;
@@ -221,9 +223,37 @@ export default function WorkSection() {
       goTo(dx < 0 ? Math.min(at + 1, lastIndex) : Math.max(at - 1, 0));
     };
 
-    const onCancel = () => {
+    const onCancel = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
       origin.id = -1;
       origin.axis = "";
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length !== 1) {
+        touchOrigin.id = -1;
+        return;
+      }
+      const touch = event.touches[0];
+      touchOrigin.x = touch.clientX;
+      touchOrigin.y = touch.clientY;
+      touchOrigin.id = touch.identifier;
+    };
+
+    const onTouchEnd = (event: TouchEvent) => {
+      const touch = Array.from(event.changedTouches).find(({ identifier }) => identifier === touchOrigin.id);
+      if (!touch || touchOrigin.id < 0) return;
+      touchOrigin.id = -1;
+      const dx = touch.clientX - touchOrigin.x;
+      const dy = touch.clientY - touchOrigin.y;
+      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.15) return;
+      skipClick.current = true;
+      const at = featuredRef.current;
+      goTo(dx < 0 ? Math.min(at + 1, lastIndex) : Math.max(at - 1, 0));
+    };
+
+    const onTouchCancel = () => {
+      touchOrigin.id = -1;
     };
 
     section.addEventListener("wheel", onWheel, { passive: false });
@@ -231,17 +261,18 @@ export default function WorkSection() {
     section.addEventListener("pointermove", onMove, { passive: false, capture: true });
     section.addEventListener("pointerup", onUp);
     section.addEventListener("pointercancel", onCancel);
-    const onTouchMove = (event: TouchEvent) => {
-      if (origin.axis === "y") event.preventDefault();
-    };
-    section.addEventListener("touchmove", onTouchMove, { passive: false });
+    section.addEventListener("touchstart", onTouchStart, { passive: true });
+    section.addEventListener("touchend", onTouchEnd, { passive: true });
+    section.addEventListener("touchcancel", onTouchCancel, { passive: true });
     return () => {
       section.removeEventListener("wheel", onWheel);
       section.removeEventListener("pointerdown", onDown);
       section.removeEventListener("pointermove", onMove, { capture: true });
       section.removeEventListener("pointerup", onUp);
       section.removeEventListener("pointercancel", onCancel);
-      section.removeEventListener("touchmove", onTouchMove);
+      section.removeEventListener("touchstart", onTouchStart);
+      section.removeEventListener("touchend", onTouchEnd);
+      section.removeEventListener("touchcancel", onTouchCancel);
     };
   }, [goTo, lastIndex, lenis]);
 

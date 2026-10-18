@@ -150,12 +150,42 @@ export default function WorkSection() {
     const section = containerRef.current;
     if (!section) return;
 
-    const origin = { x: 0, y: 0, id: -1, axis: "" as "" | "x" | "y" };
+    const origin = { x: 0, y: 0, yLast: 0, id: -1, axis: "" as "" | "x" | "y" };
+
+    const scrollerTop = () => document.scrollingElement?.scrollTop ?? window.scrollY;
+
+    const applyScroll = (deltaY: number) => {
+      const scroller = document.scrollingElement;
+      if (!scroller) return;
+      const top = Math.min(Math.max(0, scrollerTop() + deltaY), scroller.scrollHeight - window.innerHeight);
+      if (lenis) {
+        lenis.scrollTo(top, { immediate: true, force: true });
+      } else {
+        scroller.scrollTop = top;
+      }
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) return;
+
+      const unit = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+        ? 16
+        : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+          ? window.innerHeight
+          : 1;
+      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (!delta) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      applyScroll(delta * unit);
+    };
 
     const onDown = (event: PointerEvent) => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
       origin.x = event.clientX;
       origin.y = event.clientY;
+      origin.yLast = event.clientY;
       origin.id = event.pointerId;
       origin.axis = "";
     };
@@ -168,6 +198,10 @@ export default function WorkSection() {
         if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
         origin.axis = Math.abs(dy) > Math.abs(dx) ? "y" : "x";
       }
+      if (origin.axis !== "y") return;
+      event.preventDefault();
+      applyScroll(origin.yLast - event.clientY);
+      origin.yLast = event.clientY;
     };
 
     const onUp = (event: PointerEvent) => {
@@ -192,17 +226,24 @@ export default function WorkSection() {
       origin.axis = "";
     };
 
+    section.addEventListener("wheel", onWheel, { passive: false });
     section.addEventListener("pointerdown", onDown);
-    section.addEventListener("pointermove", onMove, { capture: true });
+    section.addEventListener("pointermove", onMove, { passive: false, capture: true });
     section.addEventListener("pointerup", onUp);
     section.addEventListener("pointercancel", onCancel);
+    const onTouchMove = (event: TouchEvent) => {
+      if (origin.axis === "y") event.preventDefault();
+    };
+    section.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
+      section.removeEventListener("wheel", onWheel);
       section.removeEventListener("pointerdown", onDown);
       section.removeEventListener("pointermove", onMove, { capture: true });
       section.removeEventListener("pointerup", onUp);
       section.removeEventListener("pointercancel", onCancel);
+      section.removeEventListener("touchmove", onTouchMove);
     };
-  }, [goTo, lastIndex]);
+  }, [goTo, lastIndex, lenis]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -262,7 +303,6 @@ export default function WorkSection() {
 
   const rawX = useTransform(progress, (value) => -shift * value);
   const x = useSpring(rawX, spring);
-  const scrollHintOpacity = useTransform(progress, [0, 0.025, 0.07], [1, 0.5, 0]);
 
   useMotionValueEvent(progress, "change", (value) => {
     const next = Math.round(value * lastIndex);
@@ -296,12 +336,6 @@ export default function WorkSection() {
               }}
             />
           ))}
-        </motion.div>
-        <motion.div className="scroll-cue chrome" style={{ opacity: scrollHintOpacity }}>
-          <span>Scroll to explore</span>
-          <svg className="scroll-cue__arrow" viewBox="0 0 16 20" fill="none" aria-hidden="true">
-            <path d="M8 1v16m0 0 6-6m-6 6-6-6" stroke="currentColor" strokeWidth="1.2" />
-          </svg>
         </motion.div>
       </div>
     </section>

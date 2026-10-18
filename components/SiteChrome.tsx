@@ -49,7 +49,7 @@ function BracketLabel({
 }
 
 export default function SiteChrome() {
-  const { isLight, toggle: toggleTheme } = useTheme();
+  const { isLight } = useTheme();
   const { filters, setFilter } = useWork();
   const total = filters[0]?.count ?? 0;
   const pathname = usePathname();
@@ -102,16 +102,6 @@ export default function SiteChrome() {
           >
             <BracketLabel active={onHome}>Dipps.dev</BracketLabel>
           </Link>
-          <div className="site-chrome__toggles">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="group opacity-[.32] hover:opacity-100"
-              aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
-            >
-              <BracketLabel>{isLight ? "Dark" : "Light"}</BracketLabel>
-            </button>
-          </div>
         </div>
 
         {!onAbout ? (
@@ -166,8 +156,8 @@ export default function SiteChrome() {
               drift={0.28}
               openDown
               onSelect={onMenuSelect}
-              width={88}
-              height={62}
+              width={76}
+              height={54}
               radius={10}
             spread={160}
             lift={108}

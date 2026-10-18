@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import WaveField from "../components/WaveField";
 import ThemeProvider from "../components/ThemeProvider";
 import SoundProvider from "../components/SoundProvider";
 import SmoothScroll from "../components/SmoothScroll";
@@ -43,7 +42,6 @@ export default function RootLayout({
             <SmoothScroll>
               <WorkProvider>
                 <PageTransition>
-                  <WaveField />
                   <SiteChrome />
                   <WorkTimeline />
                   <div className="relative z-10">{children}</div>

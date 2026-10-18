@@ -4,8 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeContextValue = {
   isLight: boolean;
-  toggle: () => void;
-  ready: boolean;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -18,43 +16,24 @@ export function useTheme() {
   return ctx;
 }
 
-function readIsLight() {
-  const stored = window.localStorage.getItem("dipps-theme");
-  if (stored === "dark") return false;
-  if (stored === "light") return true;
-  return !window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isLight, setIsLight] = useState(true);
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const next = readIsLight();
-    setIsLight(next);
-    document.documentElement.dataset.theme = next ? "light" : "dark";
-    setReady(true);
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const updateTheme = () => {
+      const nextIsLight = !media.matches;
+      setIsLight(nextIsLight);
+      document.documentElement.dataset.theme = nextIsLight ? "light" : "dark";
+    };
+
+    updateTheme();
+    media.addEventListener("change", updateTheme);
+    return () => media.removeEventListener("change", updateTheme);
   }, []);
 
-  useEffect(() => {
-    if (!ready) return;
-    document.documentElement.dataset.theme = isLight ? "light" : "dark";
-    window.localStorage.setItem("dipps-theme", isLight ? "light" : "dark");
-
-    const themeColor = isLight ? "#f4f4f2" : "#0f0f0f";
-    let themeColorMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    if (!themeColorMeta) {
-      themeColorMeta = document.createElement("meta");
-      themeColorMeta.name = "theme-color";
-      document.head.append(themeColorMeta);
-    }
-    themeColorMeta.content = themeColor;
-  }, [isLight, ready]);
-
-  const toggle = () => setIsLight((prev) => !prev);
-
   return (
-    <ThemeContext.Provider value={{ isLight, toggle, ready }}>
+    <ThemeContext.Provider value={{ isLight }}>
       {children}
     </ThemeContext.Provider>
   );

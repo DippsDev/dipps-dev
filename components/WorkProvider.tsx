@@ -64,7 +64,7 @@ export default function WorkProvider({ children }: { children: React.ReactNode }
       const top =
         section.offsetTop + (index / lastIndex) * (section.offsetHeight - window.innerHeight);
       if (lenis) {
-        lenis.scrollTo(top, { duration: 1.15, easing: easeOut });
+        lenis.scrollTo(top, { duration: 0.8, easing: easeOut });
       } else {
         window.scrollTo({ top, behavior: "smooth" });
       }
